@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/action_delete"
+        android:title="删除" />
+
+    <item
+        android:id="@+id/action_update"
+        android:title="更新" />
+    <item
+        android:id="@+id/action_tj"
+        android:title="添加到生词本" />
+
+</menu>
