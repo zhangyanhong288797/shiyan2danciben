@@ -11,8 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+//import com.example.amy.mywordbook.wordcontract.Words;
 import com.example.asus.danciben.wordcontract.Words;
-
 
 
 public class WordsDB {

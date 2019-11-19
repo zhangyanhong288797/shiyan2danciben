@@ -20,7 +20,9 @@ import java.util.ArrayList;
 import java.util.Map;
 
 import java.util.List;
+//import com.example.amy.mywordbook.wordcontract.Words;
 import com.example.asus.danciben.wordcontract.Words;
+
 /**
  * A fragment representing a list of Items.
  * <p/>

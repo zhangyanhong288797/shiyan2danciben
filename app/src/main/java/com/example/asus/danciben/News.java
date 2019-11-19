@@ -17,7 +17,7 @@ public class News extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         WebView myWebView = (WebView) findViewById(R.id.newscontent);
-        myWebView.loadUrl("http://www.yingyu.com/news/");
+        myWebView.loadUrl("http://www.hxen.com/englishnews/nation/");
 
     }
 

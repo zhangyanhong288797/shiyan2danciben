@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
-
+//import com.example.amy.mywordbook.wordcontract.Words;
 import com.example.asus.danciben.wordcontract.Words;
 
 public class WordsProvider extends ContentProvider {

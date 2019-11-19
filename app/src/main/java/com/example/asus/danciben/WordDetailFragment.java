@@ -12,6 +12,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 
+//import com.example.amy.mywordbook.wordcontract.Words;
 import com.example.asus.danciben.wordcontract.Words;
 
 public class WordDetailFragment extends Fragment {

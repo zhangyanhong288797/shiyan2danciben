@@ -19,6 +19,8 @@ import android.widget.TableLayout;
 
 import com.example.asus.danciben.wordcontract.Words;
 
+//import com.example.amy.mywordbook.wordcontract.Words;
+
 public class BookActivity extends AppCompatActivity implements WordItemFragment.OnFragmentInteractionListener, WordDetailFragment.OnFragmentInteractionListener {
     private static final String TAG = "myTag";
     @Override
@@ -51,7 +53,6 @@ public class BookActivity extends AppCompatActivity implements WordItemFragment.
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //实例化menu布局
         getMenuInflater().inflate(R.menu.menu_book, menu);
         return true;
     }
@@ -137,7 +138,7 @@ public class BookActivity extends AppCompatActivity implements WordItemFragment.
 
     //删除对话框
     private void DeleteDialog(final String strId) {
-        new AlertDialog.Builder(this).setTitle("删除单词").setMessage("您确定删除单词🐎?").setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        new AlertDialog.Builder(this).setTitle("删除单词").setMessage("是否真的删除单词?").setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 //既可以使用Sql语句删除，也可以使用使用delete方法删除
@@ -269,8 +270,6 @@ public class BookActivity extends AppCompatActivity implements WordItemFragment.
 
         WordDetailFragment fragment = new WordDetailFragment();
         fragment.setArguments(arguments);
-        //fragmentmanger是fragment的管理器，主要用来对activity中的Fragement进行管理
-        //FragmentTransaction是fragment事务类，主要对activity中fragment进行操作
         getFragmentManager().beginTransaction().replace(R.id.worddetail, fragment).commit();
     }
 
