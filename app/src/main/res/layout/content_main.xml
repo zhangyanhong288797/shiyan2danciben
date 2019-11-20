@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context=".MainActivity"
-    tools:showIn="@layout/activity_main">
+    tools:showIn="@layout/activity_main"
+    android:background="#8000">
 
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -57,7 +58,7 @@
                 android:layout_height="265dp"
 
                 android:layout_weight="0.23"
-                android:backgroundTint="@android:color/holo_blue_light"
+                android:backgroundTint="@android:color/holo_red_dark"
                 android:text="新闻阅读"
                 android:textColor="@android:color/background_light"
                 android:textSize="24sp"
@@ -67,9 +68,8 @@
                 android:id="@+id/my"
                 android:layout_width="match_parent"
                 android:layout_height="265dp"
-
                 android:layout_weight="0.26"
-                android:backgroundTint="@android:color/holo_blue_dark"
+                android:backgroundTint="@android:color/holo_red_dark"
                 android:text="我的单词本"
                 android:textAllCaps="false"
                 android:textColor="@android:color/background_light"

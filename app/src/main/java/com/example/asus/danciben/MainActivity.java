@@ -41,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
 
-        Button book = (Button)findViewById(R.id.my);
-        book.setOnClickListener(new OnClickListener() {
+        Button my = (Button)findViewById(R.id.my);
+        my.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent= new Intent(MainActivity.this,BookActivity.class);

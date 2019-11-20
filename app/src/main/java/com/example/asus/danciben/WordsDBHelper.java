@@ -40,7 +40,7 @@ public class WordsDBHelper extends SQLiteOpenHelper{
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        //创建数据库（调用父类的execSQL()方法）
+        //创建数据库（调用父类的execSQL()方法去执行建表语句）
         sqLiteDatabase.execSQL(SQL_CREATE_DATABASE);
     }
 

@@ -18,6 +18,7 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 
 import com.example.asus.danciben.wordcontract.Words;
+import android.support.v4.app.Fragment;
 
 //import com.example.amy.mywordbook.wordcontract.Words;
 
@@ -29,7 +30,7 @@ public class BookActivity extends AppCompatActivity implements WordItemFragment.
         setContentView(R.layout.activity_book);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+       // getSupportFragmentManager().beginTransaction().add(R.id.container,new WordItemFragment()).commit();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -38,7 +39,9 @@ public class BookActivity extends AppCompatActivity implements WordItemFragment.
             }
         });
     }
+   //public void Word(Uri uri){
 
+  // }
 
     @Override
     protected void onDestroy() {
@@ -81,14 +84,12 @@ public class BookActivity extends AppCompatActivity implements WordItemFragment.
     }
 
 
-    /**
-     * 更新单词列表
-     */
+    //更新单词列表
+
     private void RefreshWordItemFragment() {
         WordItemFragment wordItemFragment = (WordItemFragment) getFragmentManager().findFragmentById(R.id.wordslist);
         wordItemFragment.refreshWordsList();
     }
-
     /**
      * 更新单词列表
      */
@@ -290,6 +291,7 @@ public class BookActivity extends AppCompatActivity implements WordItemFragment.
             }
 
         }
+
 
     }
 }

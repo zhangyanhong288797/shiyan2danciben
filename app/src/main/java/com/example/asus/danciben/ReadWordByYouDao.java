@@ -53,7 +53,7 @@ public class ReadWordByYouDao extends Thread{
             OutputStreamWriter outWriter = new OutputStreamWriter(out);
             BufferedWriter bufferW = new BufferedWriter(outWriter);
 
-            String require = "keyfrom=haobaoshui&key=1650542691&type=data&doctype=json&version=1.1&q=";
+            String require = "keyfrom=wordbookaaaa&key=1303333811&type=data&doctype=json&version=1.1&q=";
 
             bufferW.write(require + word);
             bufferW.flush();
@@ -85,11 +85,13 @@ public class ReadWordByYouDao extends Thread{
     }
 
     public Words.YouDaoWord getYouDaoWord(String jsonString) throws JSONException {
+        //fengzhuangchengJSON  duixiang
         JSONObject jsonObject = new JSONObject(jsonString);
         System.out.println(jsonObject);
         JSONArray jsonArray = jsonObject.getJSONArray("web");
         Map<String, String> map = new HashMap<>();
         for(int i=0; i<jsonArray.length(); i++){
+            //转换为java对象
             map.put(jsonArray.getJSONObject(i).getString("key"), jsonArray.getJSONObject(i).getString("value"));
         }
         return new Words.YouDaoWord(jsonObject.getString("query"), jsonObject.getString("translation"), map);

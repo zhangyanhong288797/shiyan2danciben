@@ -20,7 +20,8 @@ public class WordsDB {
 
     private static WordsDBHelper mDbHelper;
 
-    //采用单例模式
+    //采用单例模式。使得类的对象成为系统中的唯一一个实例
+    //在自己内部定义自己的一个实例，只供内部调用
     private static WordsDB instance = new WordsDB();
 
     public static WordsDB getWordsDB() {

@@ -28,7 +28,7 @@
 
         <fragment
             android:id="@+id/worddetail"
-            android:name="com.example.asus.danciben.WordItemFragment"
+            android:name="com.example.asus.danciben.WordDetailFragment"
             android:layout_width="200dp"
             android:layout_height="match_parent"
             android:layout_weight="1" />

@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 import java.util.List;
@@ -81,11 +82,9 @@ public class WordItemFragment extends ListFragment {
         WordsDB wordsDB=WordsDB.getWordsDB();
         if (wordsDB != null) {
             ArrayList<Map<String, String>> items = wordsDB.getAllWords();
-
             SimpleAdapter adapter = new SimpleAdapter(getActivity(), items, R.layout.item,
                     new String[]{Words.Word._ID, Words.Word.COLUMN_NAME_WORD},
                     new int[]{R.id.textId, R.id.textViewWord});
-
             setListAdapter(adapter);
         }
     }
