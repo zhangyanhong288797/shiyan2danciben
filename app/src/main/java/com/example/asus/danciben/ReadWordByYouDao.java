@@ -1,12 +1,7 @@
 package com.example.asus.danciben;
 
-/**
- * Created by AMY on 2017/11/4.
- */
-
 import android.util.Log;
 
-//import com.example.amy.mywordbook.wordcontract.Words;
 import com.example.asus.danciben.wordcontract.Words;
 
 import org.json.JSONArray;
@@ -25,26 +20,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class ReadWordByYouDao extends Thread{
+public class ReadWordByYouDao extends Thread {
 
     private String word;
     private String resultJson;
-    private static final String TAG = "myTag";
+    private static final String TAG = "ReadWordByYouDao";
 
-  //  public ReadWordByYouDao(){
+    //  public ReadWordByYouDao(){
     //    word = "one";
-   // }
+    // }
 
-    public ReadWordByYouDao(String word){
+    public ReadWordByYouDao(String word) {
         this.word = word;
     }
 
-    public void run(){
+    @Override
+    public void run() {
 
         try {
 
             URL url = new URL("http://fanyi.youdao.com/openapi.do");
-            HttpURLConnection connection = (HttpURLConnection)url.openConnection();
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.addRequestProperty("encoding", "utf-8");
             connection.setDoOutput(true);
             connection.setRequestMethod("POST");
@@ -53,7 +49,8 @@ public class ReadWordByYouDao extends Thread{
             OutputStreamWriter outWriter = new OutputStreamWriter(out);
             BufferedWriter bufferW = new BufferedWriter(outWriter);
 
-            String require = "keyfrom=wordbookaaaa&key=1303333811&type=data&doctype=json&version=1.1&q=";
+            String require =
+                    "keyfrom=wordbookaaaa&key=1303333811&type=data&doctype=json&version=1.1&q=";
 
             bufferW.write(require + word);
             bufferW.flush();
@@ -64,7 +61,7 @@ public class ReadWordByYouDao extends Thread{
 
             String line;
             StringBuilder strBuilder = new StringBuilder();
-            while((line = bufferR.readLine()) != null){
+            while ((line = bufferR.readLine()) != null) {
                 strBuilder.append(line);
             }
 
@@ -78,7 +75,7 @@ public class ReadWordByYouDao extends Thread{
 
             resultJson = strBuilder.toString();
             Log.i(TAG, "run: " + resultJson);
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -90,11 +87,13 @@ public class ReadWordByYouDao extends Thread{
         System.out.println(jsonObject);
         JSONArray jsonArray = jsonObject.getJSONArray("web");
         Map<String, String> map = new HashMap<>();
-        for(int i=0; i<jsonArray.length(); i++){
+        for (int i = 0; i < jsonArray.length(); i++) {
             //转换为java对象
-            map.put(jsonArray.getJSONObject(i).getString("key"), jsonArray.getJSONObject(i).getString("value"));
+            map.put(jsonArray.getJSONObject(i).getString("key"),
+                    jsonArray.getJSONObject(i).getString("value"));
         }
-        return new Words.YouDaoWord(jsonObject.getString("query"), jsonObject.getString("translation"), map);
+        return new Words.YouDaoWord(jsonObject.getString("query"),
+                jsonObject.getString("translation"), map);
     }
 
     public String getWord() {

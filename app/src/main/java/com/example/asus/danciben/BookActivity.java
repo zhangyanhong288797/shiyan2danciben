@@ -1,5 +1,6 @@
 package com.example.asus.danciben;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -7,7 +8,6 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -18,45 +18,39 @@ import android.widget.EditText;
 import android.widget.TableLayout;
 
 import com.example.asus.danciben.wordcontract.Words;
-import android.support.v4.app.Fragment;
 
-//import com.example.amy.mywordbook.wordcontract.Words;
+public class BookActivity extends AppCompatActivity implements
+        WordItemFragment.OnFragmentInteractionListener,
+        WordDetailFragment.OnFragmentInteractionListener {
+    private static final String TAG = "BookActivity";
 
-public class BookActivity extends AppCompatActivity implements WordItemFragment.OnFragmentInteractionListener, WordDetailFragment.OnFragmentInteractionListener {
-    private static final String TAG = "myTag";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_book);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-       // getSupportFragmentManager().beginTransaction().add(R.id.container,new WordItemFragment()).commit();
+        // getSupportFragmentManager().beginTransaction().add(R.id.container,new WordItemFragment()).commit();
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                InsertDialog();
+                insertDialog();
             }
         });
     }
-   //public void Word(Uri uri){
-
-  // }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        WordsDB wordsDB=WordsDB.getWordsDB();
-        if (wordsDB != null)
-            wordsDB.close();
-
+        WordsDB.getWordsDB().close();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_book, menu);
+
         return true;
     }
 
@@ -71,60 +65,87 @@ public class BookActivity extends AppCompatActivity implements WordItemFragment.
         switch (id) {
             case R.id.action_search:
                 //查找
-                SearchDialog();
+                searchDialog();
                 return true;
             case R.id.action_insert:
                 //新增单词
-                InsertDialog();
+                insertDialog();
                 return true;
-        }
+            default:
+                break;
+            case  R.id.action_help:
+                //帮助菜单
+                AlertDialog.Builder dialog = new AlertDialog.Builder(BookActivity.this);
+                dialog.setTitle("This is HELP");
+                dialog.setMessage("HELP");
+                dialog.setCancelable(false);
+                dialog.setPositiveButton("Ture", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
 
+                    }
+                });
+                dialog.setNegativeButton("False", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+
+                    }
+                });
+                dialog.show();
+        }
 
         return super.onOptionsItemSelected(item);
     }
 
-
     //更新单词列表
 
-    private void RefreshWordItemFragment() {
-        WordItemFragment wordItemFragment = (WordItemFragment) getFragmentManager().findFragmentById(R.id.wordslist);
+    private void refreshWordItemFragment() {
+        WordItemFragment wordItemFragment =
+                (WordItemFragment) getFragmentManager().findFragmentById(R.id.wordslist);
         wordItemFragment.refreshWordsList();
     }
+
     /**
      * 更新单词列表
      */
-    private void RefreshWordItemFragment(String strWord) {
-        WordItemFragment wordItemFragment = (WordItemFragment) getFragmentManager().findFragmentById(R.id.wordslist);
+    private void refreshWordItemFragment(String strWord) {
+        WordItemFragment wordItemFragment =
+                (WordItemFragment) getFragmentManager().findFragmentById(R.id.wordslist);
         wordItemFragment.refreshWordsList(strWord);
     }
 
     //新增对话框
-    private void InsertDialog() {
-        final TableLayout tableLayout = (TableLayout) getLayoutInflater().inflate(R.layout.insert, null);
+    private void insertDialog() {
+        final TableLayout tableLayout =
+                (TableLayout) getLayoutInflater().inflate(R.layout.insert, null);
         new AlertDialog.Builder(this)
-                .setTitle("新增单词")//标题
+                .setTitle(R.string.add_word)//标题
                 .setView(tableLayout)//设置视图
                 //确定按钮及其动作
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String strWord = ((EditText) tableLayout.findViewById(R.id.txtWord)).getText().toString();
-                        String strMeaning = ((EditText) tableLayout.findViewById(R.id.txtMeaning)).getText().toString();
-                        String strSample = ((EditText) tableLayout.findViewById(R.id.txtSample)).getText().toString();
+                        String strWord =
+                                ((EditText) tableLayout.findViewById(R.id.txtWord)).getText()
+                                        .toString();
+                        String strMeaning =
+                                ((EditText) tableLayout.findViewById(R.id.txtMeaning)).getText()
+                                        .toString();
+                        String strSample =
+                                ((EditText) tableLayout.findViewById(R.id.txtSample)).getText()
+                                        .toString();
 
                         //既可以使用Sql语句插入，也可以使用使用insert方法插入
-                        // InsertUserSql(strWord, strMeaning, strSample);
-                        WordsDB wordsDB=WordsDB.getWordsDB();
-                        wordsDB.Insert(strWord, strMeaning, strSample);
+                        // insertUserSql(strWord, strMeaning, strSample);
+                        WordsDB.getWordsDB().insert(strWord, strMeaning, strSample);
 
                         //单词已经插入到数据库，更新显示列表
-                        RefreshWordItemFragment();
-
+                        refreshWordItemFragment();
 
                     }
                 })
                 //取消按钮及其动作
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -133,23 +154,22 @@ public class BookActivity extends AppCompatActivity implements WordItemFragment.
                 .create()//创建对话框
                 .show();//显示对话框
 
-
     }
 
-
     //删除对话框
-    private void DeleteDialog(final String strId) {
-        new AlertDialog.Builder(this).setTitle("删除单词").setMessage("是否真的删除单词?").setPositiveButton("确定", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                //既可以使用Sql语句删除，也可以使用使用delete方法删除
-                WordsDB wordsDB=WordsDB.getWordsDB();
-                wordsDB.DeleteUseSql(strId);
+    private void deleteDialog(final String strId) {
+        new AlertDialog.Builder(this).setTitle(R.string.delete_word)
+                .setMessage(R.string.delete_word_confirm)
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //既可以使用Sql语句删除，也可以使用使用delete方法删除
+                        WordsDB.getWordsDB().deleteUseSql(strId);
 
-                //单词已经删除，更新显示列表
-                RefreshWordItemFragment();
-            }
-        }).setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                        //单词已经删除，更新显示列表
+                        refreshWordItemFragment();
+                    }
+                }).setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -157,34 +177,41 @@ public class BookActivity extends AppCompatActivity implements WordItemFragment.
         }).create().show();
     }
 
-
     //修改对话框
-    private void UpdateDialog(final String strId, final String strWord, final String strMeaning, final String strSample) {
-        final TableLayout tableLayout = (TableLayout) getLayoutInflater().inflate(R.layout.insert, null);
+    private void updateDialog(final String strId, final String strWord, final String strMeaning,
+            final String strSample) {
+        final TableLayout tableLayout =
+                (TableLayout) getLayoutInflater().inflate(R.layout.insert, null);
         ((EditText) tableLayout.findViewById(R.id.txtWord)).setText(strWord);
         ((EditText) tableLayout.findViewById(R.id.txtMeaning)).setText(strMeaning);
         ((EditText) tableLayout.findViewById(R.id.txtSample)).setText(strSample);
         new AlertDialog.Builder(this)
-                .setTitle("修改单词")//标题
+                .setTitle(R.string.modify_word)//标题
                 .setView(tableLayout)//设置视图
                 //确定按钮及其动作
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String strNewWord = ((EditText) tableLayout.findViewById(R.id.txtWord)).getText().toString();
-                        String strNewMeaning = ((EditText) tableLayout.findViewById(R.id.txtMeaning)).getText().toString();
-                        String strNewSample = ((EditText) tableLayout.findViewById(R.id.txtSample)).getText().toString();
+                        String strNewWord =
+                                ((EditText) tableLayout.findViewById(R.id.txtWord)).getText()
+                                        .toString();
+                        String strNewMeaning =
+                                ((EditText) tableLayout.findViewById(R.id.txtMeaning)).getText()
+                                        .toString();
+                        String strNewSample =
+                                ((EditText) tableLayout.findViewById(R.id.txtSample)).getText()
+                                        .toString();
 
                         //既可以使用Sql语句更新，也可以使用使用update方法更新
-                        WordsDB wordsDB=WordsDB.getWordsDB();
-                        wordsDB.UpdateUseSql(strId, strWord, strNewMeaning, strNewSample);
+                        WordsDB.getWordsDB()
+                                .updateUseSql(strId, strWord, strNewMeaning, strNewSample);
 
                         //单词已经更新，更新显示列表
-                        RefreshWordItemFragment();
+                        refreshWordItemFragment();
                     }
                 })
                 //取消按钮及其动作
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -193,28 +220,29 @@ public class BookActivity extends AppCompatActivity implements WordItemFragment.
                 .create()//创建对话框
                 .show();//显示对话框
 
-
     }
 
-
     //查找对话框
-    private void SearchDialog() {
-        final TableLayout tableLayout = (TableLayout) getLayoutInflater().inflate(R.layout.searchterm, null);
+    private void searchDialog() {
+        final TableLayout tableLayout =
+                (TableLayout) getLayoutInflater().inflate(R.layout.searchterm, null);
         new AlertDialog.Builder(this)
-                .setTitle("查找单词")//标题
+                .setTitle(R.string.search_word)//标题
                 .setView(tableLayout)//设置视图
                 //确定按钮及其动作
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        String txtSearchWord = ((EditText) tableLayout.findViewById(R.id.txtSearchWord)).getText().toString();
+                        String txtSearchWord =
+                                ((EditText) tableLayout.findViewById(R.id.txtSearchWord)).getText()
+                                        .toString();
 
                         //单词已经插入到数据库，更新显示列表
-                        RefreshWordItemFragment(txtSearchWord);
+                        refreshWordItemFragment(txtSearchWord);
                     }
                 })
                 //取消按钮及其动作
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
 
@@ -240,10 +268,10 @@ public class BookActivity extends AppCompatActivity implements WordItemFragment.
     @Override
     public void onWordItemClick(String id) {
 
-        if(isLand()) {//横屏的话则在右侧的WordDetailFragment中显示单词详细信息
-            ChangeWordDetailFragment(id);
-        }else{
-            Intent intent = new Intent(BookActivity.this,WordDetailActivity.class);
+        if (isLand()) {//横屏的话则在右侧的WordDetailFragment中显示单词详细信息
+            changeWordDetailFragment(id);
+        } else {
+            Intent intent = new Intent(BookActivity.this, WordDetailActivity.class);
             intent.putExtra(WordDetailFragment.ARG_ID, id);
             startActivity(intent);
         }
@@ -251,7 +279,7 @@ public class BookActivity extends AppCompatActivity implements WordItemFragment.
     }
 
     //是否是横屏
-    private boolean isLand(){
+    private boolean isLand() {
         /*
         Fragment fragment=getFragmentManager().findFragmentById(R.id.worddetail);
         if(fragment==null)
@@ -259,12 +287,13 @@ public class BookActivity extends AppCompatActivity implements WordItemFragment.
         return true;
         */
 
-        if(getResources().getConfiguration().orientation== Configuration.ORIENTATION_LANDSCAPE)
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             return true;
+        }
         return false;
     }
 
-    private void ChangeWordDetailFragment(String id){
+    private void changeWordDetailFragment(String id) {
         Bundle arguments = new Bundle();
         arguments.putString(WordDetailFragment.ARG_ID, id);
         Log.v(TAG, id);
@@ -276,22 +305,18 @@ public class BookActivity extends AppCompatActivity implements WordItemFragment.
 
     @Override
     public void onDeleteDialog(String strId) {
-        DeleteDialog(strId);
+        deleteDialog(strId);
     }
 
     @Override
     public void onUpdateDialog(String strId) {
-        WordsDB wordsDB=WordsDB.getWordsDB();
-        if (wordsDB != null && strId != null) {
-
-
-            Words.WordDescription item = wordsDB.getSingleWord(strId);
+        if (strId != null) {
+            Words.WordDescription item = WordsDB.getWordsDB().getSingleWord(strId);
             if (item != null) {
-                UpdateDialog(strId, item.word, item.meaning, item.sample);
+                updateDialog(strId, item.word, item.meaning, item.sample);
             }
 
         }
-
 
     }
 }

@@ -1,14 +1,11 @@
 package com.example.asus.danciben;
 
-/**
- * Created by AMY on 2017/11/3.
- */
-import java.util.UUID;
 
+import java.util.UUID;
 
 public class GUID {
 
-    public static String getGUID(){
+    public static String getGUID() {
         // 创建 GUID 对象
         UUID uuid = UUID.randomUUID();
         // 得到对象产生的ID

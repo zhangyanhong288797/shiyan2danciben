@@ -2,34 +2,16 @@ package com.example.asus.danciben;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import android.app.Activity;
-import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
-//import com.example.amy.mywordbook.wordcontract.Words;
+
 import com.example.asus.danciben.wordcontract.Words;
 
 import org.json.JSONException;
-
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,26 +22,25 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
-        Button my = (Button)findViewById(R.id.my);
+        Button my = (Button) findViewById(R.id.my);
         my.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(MainActivity.this,BookActivity.class);
+                Intent intent = new Intent(MainActivity.this, BookActivity.class);
                 startActivity(intent);
             }
         });
 
-        Button news = (Button)findViewById(R.id.news);
+        Button news = (Button) findViewById(R.id.news);
         news.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent= new Intent(MainActivity.this,News.class);
+                Intent intent = new Intent(MainActivity.this, News.class);
                 startActivity(intent);
             }
         });
-        Button search = (Button)findViewById(R.id.search);
-        final EditText in = (EditText)findViewById(R.id.in);
+        Button search = (Button) findViewById(R.id.search);
+        final EditText in = (EditText) findViewById(R.id.in);
         search.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -67,7 +48,8 @@ public class MainActivity extends AppCompatActivity {
                 wordByYouDao.start();
                 try {
                     wordByYouDao.join();
-                    Words.YouDaoWord youdaoWord = wordByYouDao.getYouDaoWord(wordByYouDao.getResultJson());
+                    Words.YouDaoWord youdaoWord =
+                            wordByYouDao.getYouDaoWord(wordByYouDao.getResultJson());
                     Intent i = new Intent(MainActivity.this, YouDaoActivity.class);
                     i.putExtra("youdaoWord", youdaoWord);
                     startActivity(i);

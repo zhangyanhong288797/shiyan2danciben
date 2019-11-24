@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import com.example.asus.danciben.wordcontract.Words;
 
-
 public class YouDaoActivity extends AppCompatActivity {
 
     private TextView word;
@@ -24,12 +23,13 @@ public class YouDaoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_youdao);
 
         Intent intent = getIntent();
-        final Words.YouDaoWord youDaoWord = (Words.YouDaoWord)intent.getSerializableExtra("youdaoWord");
+        final Words.YouDaoWord youDaoWord =
+                (Words.YouDaoWord) intent.getSerializableExtra("youdaoWord");
 
-        word = (TextView)findViewById(R.id.youdaoword);
-        translation = (TextView)findViewById(R.id.youdaowordmeaning);
-        web = (TextView)findViewById(R.id.youdaowordweb);
-        update = (Button)findViewById(R.id.btn_update);
+        word = (TextView) findViewById(R.id.youdaoword);
+        translation = (TextView) findViewById(R.id.youdaowordmeaning);
+        web = (TextView) findViewById(R.id.youdaowordweb);
+        update = (Button) findViewById(R.id.btn_update);
 
         word.setText(youDaoWord.query);
         translation.setText(youDaoWord.translation);
@@ -38,10 +38,10 @@ public class YouDaoActivity extends AppCompatActivity {
         update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                WordsDB wordsDB=WordsDB.getWordsDB();
+                WordsDB wordsDB = WordsDB.getWordsDB();
 
-                    wordsDB.Insert(youDaoWord.query, youDaoWord.translation, youDaoWord.web.toString());
-                    Toast.makeText(YouDaoActivity.this, "单词添加成功", Toast.LENGTH_SHORT).show();
+                wordsDB.insert(youDaoWord.query, youDaoWord.translation, youDaoWord.web.toString());
+                Toast.makeText(YouDaoActivity.this, "单词添加成功", Toast.LENGTH_SHORT).show();
 
             }
         });

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -12,7 +13,6 @@ import android.provider.BaseColumns;
  * 合约类(contract)
  * 每个表一个合约类，这样访问数据库比较方便
  * <p/>
- * Created by hbs on 2015-10-5.
  */
 public class Words {
 
@@ -21,14 +21,16 @@ public class Words {
         public String translation;
         public Map<String, String> web;
 
-        public YouDaoWord(String query, String translation, Map<String, String> web){
+        public YouDaoWord(String query, String translation, Map<String, String> web) {
             this.query = query;
             this.translation = translation;
             this.web = web;
         }
     }
 
-    //单词列表项
+    /**
+     * 单词列表项
+     */
     public static class WordItem {
         public String id;
         public String word;
@@ -44,14 +46,16 @@ public class Words {
         }
     }
 
-    //每个单词的描述
+    /**
+     * 每个单词的描述
+     */
     public static class WordDescription {
         public String id;
         public String word;
         public String meaning;
         public String sample;
 
-        public WordDescription(String id, String word,String meaning, String sample) {
+        public WordDescription(String id, String word, String meaning, String sample) {
             this.id = id;
             this.word = word;
             this.meaning = meaning;
@@ -88,7 +92,8 @@ public class Words {
         public static final String PATH_MULTIPLE = "word";//多条数据的路径
 
         //Content Uri
-        public static final String CONTENT_URI_STRING = "content://" + AUTHORITY + "/" + PATH_MULTIPLE;
+        public static final String CONTENT_URI_STRING =
+                "content://" + AUTHORITY + "/" + PATH_MULTIPLE;
         public static final Uri CONTENT_URI = Uri.parse(CONTENT_URI_STRING);
 
     }

@@ -10,18 +10,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 
-import java.util.List;
-//import com.example.amy.mywordbook.wordcontract.Words;
 import com.example.asus.danciben.wordcontract.Words;
 
 /**
@@ -33,10 +29,8 @@ import com.example.asus.danciben.wordcontract.Words;
 public class WordItemFragment extends ListFragment {
     private static final String TAG = "myTag";
 
-
     //当前是否为横屏
     private boolean currentIsLand;
-
 
     private OnFragmentInteractionListener mListener;
 
@@ -44,7 +38,6 @@ public class WordItemFragment extends ListFragment {
     public static WordItemFragment newInstance() {
         WordItemFragment fragment = new WordItemFragment();
         Bundle args = new Bundle();
-        ;
         fragment.setArguments(args);
         return fragment;
     }
@@ -57,9 +50,12 @@ public class WordItemFragment extends ListFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+            Bundle savedInstanceState) {
 
-        View view = super.onCreateView(inflater, container, savedInstanceState);
+       View view = super.onCreateView(inflater, container, savedInstanceState);
+
+     //View view = inflater.inflate(R.layout.fragment_item_list, container, false);
 
 
         //为列表注册上下文菜单
@@ -79,43 +75,35 @@ public class WordItemFragment extends ListFragment {
 
     //更新单词列表，从数据库中找到所有单词，然后在列表中显示出来
     public void refreshWordsList() {
-        WordsDB wordsDB=WordsDB.getWordsDB();
-        if (wordsDB != null) {
-            ArrayList<Map<String, String>> items = wordsDB.getAllWords();
-            SimpleAdapter adapter = new SimpleAdapter(getActivity(), items, R.layout.item,
-                    new String[]{Words.Word._ID, Words.Word.COLUMN_NAME_WORD},
-                    new int[]{R.id.textId, R.id.textViewWord});
-            setListAdapter(adapter);
-        }
+        ArrayList<Map<String, String>> items = WordsDB.getWordsDB().getAllWords();
+        SimpleAdapter adapter = new SimpleAdapter(getActivity(), items, R.layout.item,
+                new String[]{Words.Word._ID, Words.Word.COLUMN_NAME_WORD},
+                new int[]{R.id.textId, R.id.textViewWord});
+        setListAdapter(adapter);
     }
 
     //更新单词列表，从数据库中找到同strWord向匹配的单词，然后在列表中显示出来
     public void refreshWordsList(String strWord) {
-        WordsDB wordsDB=WordsDB.getWordsDB();
-        if (wordsDB != null) {
-            ArrayList<Map<String, String>> items = wordsDB.SearchUseSql(strWord);
-            if(items.size()>0){
+        ArrayList<Map<String, String>> items = WordsDB.getWordsDB().searchUseSql(strWord);
+        if (items.size() > 0) {
 
-                SimpleAdapter adapter = new SimpleAdapter(getActivity(), items, R.layout.item,
-                        new String[]{Words.Word._ID, Words.Word.COLUMN_NAME_WORD},
-                        new int[]{R.id.textId, R.id.textViewWord});
+            SimpleAdapter adapter = new SimpleAdapter(getActivity(), items, R.layout.item,
+                    new String[]{Words.Word._ID, Words.Word.COLUMN_NAME_WORD},
+                    new int[]{R.id.textId, R.id.textViewWord});
 
-                setListAdapter(adapter);
-            }else{
-                Toast.makeText(getActivity(),"Not found",Toast.LENGTH_LONG).show();
-            }
+            setListAdapter(adapter);
+        } else {
+            Toast.makeText(getActivity(), "Not found", Toast.LENGTH_LONG).show();
         }
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //刷新单词列表
+//        //刷新单词列表
         refreshWordsList();
     }
-
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
@@ -150,10 +138,11 @@ public class WordItemFragment extends ListFragment {
                     mListener.onUpdateDialog(strId);
                 }
                 break;
+            default:
+                break;
         }
         return true;
     }
-
 
     @Override
     public void onDetach() {
@@ -162,7 +151,8 @@ public class WordItemFragment extends ListFragment {
     }
 
     @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+    public void onCreateContextMenu(ContextMenu menu, View v,
+            ContextMenu.ContextMenuInfo menuInfo) {
         Log.v(TAG, "WordItemFragment::onCreateContextMenu()");
         super.onCreateContextMenu(menu, v, menuInfo);
         getActivity().getMenuInflater().inflate(R.menu.contextmenu_wordslistview, menu);
@@ -187,8 +177,6 @@ public class WordItemFragment extends ListFragment {
      */
     public interface OnFragmentInteractionListener {
         public void onWordItemClick(String id);
-
-
 
         public void onDeleteDialog(String strId);
 
