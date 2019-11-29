@@ -2,9 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Danciben.iml" filepath="$PROJECT_DIR$/Danciben.iml" />
-      <module fileurl="file://$PROJECT_DIR$/app/Danciben-app.iml" filepath="$PROJECT_DIR$/app/Danciben-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/shiyan2danciben.iml" filepath="$PROJECT_DIR$/shiyan2danciben.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/shiyan2danciben-app.iml" filepath="$PROJECT_DIR$/app/shiyan2danciben-app.iml" />
     </modules>
   </component>
 </project>

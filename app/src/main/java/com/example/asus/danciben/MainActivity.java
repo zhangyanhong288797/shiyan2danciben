@@ -37,8 +37,19 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, News.class);
                 startActivity(intent);
+
             }
         });
+        Button scb1 = (Button) findViewById(R.id.scb);
+        scb1.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, scbActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
         Button search = (Button) findViewById(R.id.search);
         final EditText in = (EditText) findViewById(R.id.in);
         search.setOnClickListener(new OnClickListener() {

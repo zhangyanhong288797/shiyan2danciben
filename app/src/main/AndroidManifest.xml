@@ -3,7 +3,8 @@
     package="com.example.asus.danciben">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:name=".WordsApplication"
         android:allowBackup="true"
@@ -12,6 +13,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+        <provider
+            android:name=".WordsProvider"
+            android:authorities="com.example.asus.danciben.provider"
+            android:enabled="true"
+            android:exported="true"></provider>
+        <provider
+            android:name=".WordsProvider"
+            android:authorities="com.example.asus.danciben.provider"
+            android:enabled="true"
+            android:exported="true" />
+
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,11 +31,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name="com.example.asus.danciben.BookActivity"></activity>
-        <activity android:name=".News"/>
-        <activity android:name=".YouDaoActivity"></activity>
-        <activity android:name=".WordDetailActivity"/>
+        <activity android:name=".BookActivity" />
+        <activity android:name=".News" />
+        <activity android:name=".YouDaoActivity" />
+        <activity android:name=".WordDetailActivity" />
     </application>
 
 </manifest>

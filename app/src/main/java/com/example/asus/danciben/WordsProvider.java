@@ -1,134 +1,217 @@
 package com.example.asus.danciben;
 
+
+
 import android.content.ContentProvider;
-import android.content.ContentUris;
+
 import android.content.ContentValues;
+
 import android.content.UriMatcher;
+
 import android.database.Cursor;
-import android.database.SQLException;
+
 import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteQueryBuilder;
+
 import android.net.Uri;
+
+
 
 import com.example.asus.danciben.wordcontract.Words;
 
-public class WordsProvider extends ContentProvider {
-    private static final int MULTIPLE_WORDS = 1;//
-    private static final int SINGLE_WORD = 2;
 
-    WordsDBHelper mDbHelper;
-    private static final UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+
+public class WordsProvider extends ContentProvider {
+
+
+
+    public static final int WORDS_DIR=0;
+
+    public static final int WORDS_ITEM=1;
+
+    public static final String AUTHORITY="com.example.asus.danciben.provider";
+
+    private static UriMatcher uriMatcher;
+
+    private WordsDBHelper mDbHelper;
 
     static {
-        uriMatcher.addURI(Words.AUTHORITY, Words.Word.PATH_SINGLE, SINGLE_WORD);
-        uriMatcher.addURI(Words.AUTHORITY, Words.Word.PATH_MULTIPLE, MULTIPLE_WORDS);
+
+        uriMatcher=new UriMatcher(UriMatcher.NO_MATCH);
+
+        uriMatcher.addURI(AUTHORITY,"words",WORDS_DIR);
+
+        uriMatcher.addURI(AUTHORITY,"words/*",WORDS_ITEM);
+
     }
 
-    public WordsProvider() {
+
+
+    public boolean onCreate(){
+
+        mDbHelper=new WordsDBHelper(this.getContext());
+
+        return true;
+
     }
 
-    //删除数据
+
+
     @Override
+
+    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+
+        SQLiteDatabase db=mDbHelper.getReadableDatabase();
+
+        Cursor cursor=null;
+
+        switch (uriMatcher.match(uri)){
+
+            case WORDS_DIR:
+
+                //查询words表中所有数据
+
+                cursor=db.query("Words.Word.TABLE_NAME ",projection,selection,selectionArgs,null,null,sortOrder);
+
+                break;
+
+            case WORDS_ITEM:
+
+                //查询words表中单条数据
+
+                String words_word=uri.getPathSegments().get(1);
+
+                cursor=db.query("Words.Word.TABLE_NAME ",projection,"word=?",new String[]{words_word},null,null,sortOrder);
+
+                break;
+
+            default:
+
+                break;
+
+        }
+
+        return cursor;
+
+    }
+
+
+
+    @Override
+
+    public Uri insert(Uri uri, ContentValues values) {
+
+        //添加数据
+
+        SQLiteDatabase db=mDbHelper.getWritableDatabase();
+
+        Uri uriReturn=null;
+
+        switch (uriMatcher.match(uri)){
+
+            case WORDS_DIR:
+
+            case WORDS_ITEM:
+
+                long i=db.insert("Words.Word.TABLE_NAME ",null,values);
+
+                String id=values.getAsString("word");
+
+                uriReturn=Uri.parse("content://"+AUTHORITY+"/Words.Word.TABLE_NAME /"+id);
+
+            default:break;
+
+        }
+
+        return uriReturn;
+
+    }
+
+
+
+    @Override
+
+    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+
+        SQLiteDatabase db=mDbHelper.getWritableDatabase();
+
+        int updateRows=0;
+
+        switch (uriMatcher.match(uri)){
+
+            case WORDS_DIR:
+
+                updateRows=db.update("Words.Word.TABLE_NAME ",values,selection,selectionArgs);
+
+                break;
+
+            case WORDS_ITEM:
+
+                String id=uri.getPathSegments().get(1);
+
+                updateRows=db.update("Words.Word.TABLE_NAME ",values,"word=?",new String[]{id});
+
+                break;
+
+        }
+
+        return updateRows;
+
+    }
+
+
+
+    @Override
+
     public int delete(Uri uri, String selection, String[] selectionArgs) {
 
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-        int count = 0;
-        switch (uriMatcher.match(uri)) {
-            case MULTIPLE_WORDS:
-                count = db.delete(Words.Word.TABLE_NAME, selection, selectionArgs);
+        SQLiteDatabase db=mDbHelper.getWritableDatabase();
+
+        int deleteRows=0;
+
+        switch (uriMatcher.match(uri)){
+
+            case WORDS_DIR:
+
+                deleteRows=db.delete("Words.Word.TABLE_NAME ",selection,selectionArgs);
+
                 break;
-            case SINGLE_WORD:
-                String whereClause = Words.Word._ID + "=" + uri.getPathSegments().get(1);
-                count = db.delete(Words.Word.TABLE_NAME, whereClause, selectionArgs);
+
+            case WORDS_ITEM:
+
+                String id =uri.getPathSegments().get(1);
+
+                deleteRows=db.delete("Words.Word.TABLE_NAME ","word=?",new String[]{id});
+
                 break;
-            default:
-                throw new IllegalArgumentException("Unkonwn Uri:" + uri);
+
+            default:break;
+
         }
 
-        //通知ContentResolver,数据已经发生改变
-        getContext().getContentResolver().notifyChange(uri, null);
+        return deleteRows;
 
-        return count;
     }
 
-    //返回Uri对应的数据的MIME类型
+
+
     @Override
+
     public String getType(Uri uri) {
-        switch (uriMatcher.match(uri)) {
-            case MULTIPLE_WORDS://多条数据记录
-                return Words.Word.MINE_TYPE_MULTIPLE;
-            case SINGLE_WORD://单条数据记录
-                return Words.Word.MINE_TYPE_SINGLE;
-            default:
-                throw new IllegalArgumentException("Unkonwn Uri:" + uri);
-        }
-    }
 
-    @Override
-    public Uri insert(Uri uri, ContentValues values) {
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+        switch (uriMatcher.match(uri)){
 
-        long id = db.insert(Words.Word.TABLE_NAME, null, values);
-        if (id > 0) {
-            //在已有的Uri后面添加id
-            Uri newUri = ContentUris.withAppendedId(Words.Word.CONTENT_URI, id);
-            getContext().getContentResolver().notifyChange(newUri, null);
-            return newUri;
-        }
-        throw new SQLException("Failed to insert row into " + uri);
+            case WORDS_DIR:
 
-    }
+                return "vnd.android.cursor.dir/vnd.com.example.asus.danciben.provider.words";
 
-    @Override
-    public boolean onCreate() {
-        //创建SQLiteOpenHelper对象
-        mDbHelper = new WordsDBHelper(this.getContext());
-        return true;
-    }
+            case WORDS_ITEM:
 
-    @Override
-    public Cursor query(Uri uri, String[] projection, String selection,
-            String[] selectionArgs, String sortOrder) {
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
+                return "vnd.android.cursor.item/vnd.com.example.asus.danciben.provider.words";
 
-        SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-        qb.setTables(Words.Word.TABLE_NAME);
-
-        switch (uriMatcher.match(uri)) {
-            case MULTIPLE_WORDS:
-                return db.query(Words.Word.TABLE_NAME, projection, selection, selectionArgs, null,
-                        null, sortOrder);
-
-            case SINGLE_WORD:
-                qb.appendWhere(Words.Word._ID + "=" + uri.getPathSegments().get(1));
-                return qb.query(db, projection, selection, selectionArgs, null, null, sortOrder);
-
-            default:
-                throw new IllegalArgumentException("Unkonwn Uri:" + uri);
-        }
-    }
-
-    @Override
-    public int update(Uri uri, ContentValues values, String selection,
-            String[] selectionArgs) {
-        SQLiteDatabase db = mDbHelper.getReadableDatabase();
-        int count = 0;
-        switch (uriMatcher.match(uri)) {
-            case MULTIPLE_WORDS:
-                count = db.update(Words.Word.TABLE_NAME, values, selection, selectionArgs);
-                break;
-            case SINGLE_WORD:
-                String segment = uri.getPathSegments().get(1);
-                count = db.update(Words.Word.TABLE_NAME, values, Words.Word._ID + "=" + segment,
-                        selectionArgs);
-                break;
-            default:
-                throw new IllegalArgumentException("Unkonwn Uri:" + uri);
         }
 
-        //通知ContentResolver,数据已经发生改变
-        getContext().getContentResolver().notifyChange(uri, null);
+        return null;
 
-        return count;
     }
+
 }
